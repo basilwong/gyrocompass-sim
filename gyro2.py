@@ -25,7 +25,7 @@ hpedestal = Lshaft # height of pedestal
 wpedestal = 0.1 # width of pedestal
 tbase = 0.05 # thickness of base
 wbase = 3*wpedestal # width of base
-g = 9.8
+g = 22.5
 Fgrav = vector(0,-M*g,0)
 top = vector(0,0,0) # top of pedestal
 
