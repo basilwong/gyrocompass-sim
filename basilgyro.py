@@ -25,6 +25,10 @@ ORING_RADIUS = 12
 ORING_THICKNESS = 0.1
 ORING_COLOUR =(0.4,0.1,0.3)
 
+theta = 0;
+dtheta = 0.0001;
+
+
 f1 = frame()    ## frame containing rod and gyro
 
 
@@ -35,3 +39,10 @@ gyro = cylinder(frame = f1, pos= GYRO_POSITION, axis= GYRO_AXIS, radius= GYRO_RA
 IRING = ring(pos = IRING_POSITION , axis = IRING_AXIS, radius = IRING_RADIUS, thickness = IRING_THICKNESS, color = IRING_COLOUR) #XZ Plane Ring
 ORING = ring(pos = ORING_POSITION, axis = ORING_AXIS, radius = ORING_RADIUS, thickness = ORING_THICKNESS, color = ORING_COLOUR ) ## this is the outer ring, might be part of a frame later? (Y- Plane ring)
 
+while true:
+    rate(30)
+    IRING.rotate(angle = theta, axis = (1,0,0))
+    ORING.rotate(angle = theta, axis = (0,1,0))
+    theta += dtheta
+    
+    
