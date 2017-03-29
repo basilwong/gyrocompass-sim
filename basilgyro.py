@@ -35,19 +35,15 @@ WINDOW_WIDTH = 1000;
 
 
 ##setup window and displays
-w = window(title = 'gyrocompass',x=WINDOW_POSX,y=WINDOW_POSY,width=WINDOW_WIDTH,height=WINDOW_HEIGHT)
-scene1 = display(window = w, title = 'Gyrocompass up close', x=w.x,y=w.y,width=w.width/2,height=400,
-                 background=(1,1,1))
-scene2 = display(window = w, title = 'earth', x=w.x+scene1.width, y=0, width=w.width/2, height = 400)
+w = window(title = 'gyrocompass',x=WINDOW_POSX,y=WINDOW_POSY,width=WINDOW_WIDTH,height=WINDOW_HEIGHT,
+           menus = True, style=wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX)
 
+L = 320
+d = 20
+scene1 = display(window=w, x=d, y=d, width=L-2*d, height=L-2*d, forward=-vector(0,1,2))
+scene2 = display(window=w, x=d+scene1.width, y=d, width=L-2*d, height=L-2*d, forward=-vector(0,1,2))
 
-#theta = 0;
-#dtheta = 0.0001;
-
-
-## frame containing rod and gyro
-
-
+##populate scene1
 scene1.select()
 base = pyramid(pos = BASE_POSITION, axis = BASE_AXIS, size = BASE_SIZE) ## create the suppport for the outer ring 
 rod = cylinder(pos= ROD_POSITION, axis= ROD_AXIS , radius= ROD_RADIUS) #Inner Rotating Circle
@@ -55,14 +51,14 @@ gyro = cylinder(pos= GYRO_POSITION, axis= GYRO_AXIS, radius= GYRO_RADIUS,materia
 IRING = ring(pos = IRING_POSITION , axis = IRING_AXIS, radius = IRING_RADIUS, thickness = IRING_THICKNESS, color = IRING_COLOUR) #XZ Plane Ring
 ORING = ring(pos = ORING_POSITION, axis = ORING_AXIS, radius = ORING_RADIUS, thickness = ORING_THICKNESS, color = ORING_COLOUR ) ## this is the outer ring, might be part of a frame later? (Y- Plane ring)
 
+##populate scene 2
 scene2.select()
 sphere(pos = GYRO_POSITION)
 
-## this code rotates the rings, however we wont use this becuase all it does is rotate and accelerate, we need the actual physics. should also do it in spherical coordinates
-#while true:
- #   rate(30)
-  #  IRING.rotate(angle = theta, axis = (1,0,0))
-   # ORING.rotate(angle = theta, axis = (0,1,0))
-    #theta += dtheta
+
+
+
+
+
 
     
