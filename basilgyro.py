@@ -35,12 +35,12 @@ WINDOW_WIDTH = 1000;
 
 
 ##setup window and displays
-w = window(title = 'gyrocompass',x=WINDOW_POSX,y=WINDOW_POSY,width=WINDOW_WIDTH,height=WINDOW_HEIGHT,
+w = window(title = 'Gyrocompass',x=WINDOW_POSX,y=WINDOW_POSY,width=WINDOW_WIDTH,height=WINDOW_HEIGHT,
            menus = True, style=wx.SYSTEM_MENU | wx.CAPTION | wx.CLOSE_BOX)
 
-L = 320
+L = 500
 d = 20
-scene1 = display(window=w, x=d, y=d, width=L-2*d, height=L-2*d, forward=-vector(0,1,2))
+scene1 = display(window=w, x=d, y=d, width=L-2*d, height=L-2*d, forward=-vector(0,1,2),background = (1,1,1))
 scene2 = display(window=w, x=d+scene1.width, y=d, width=L-2*d, height=L-2*d, forward=-vector(0,1,2))
 
 ##populate scene1
@@ -53,9 +53,14 @@ ORING = ring(pos = ORING_POSITION, axis = ORING_AXIS, radius = ORING_RADIUS, thi
 
 ##populate scene 2
 scene2.select()
-sphere(pos = GYRO_POSITION)
+sphere(pos = GYRO_POSITION,material = materials.earth)
 
+p = w.panel # Refers to the full region of the window in which to place widgets
 
+wx.StaticText(p, pos=(d,4), size=(L-2*d,d), label='Gyroscope',
+              style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
+wx.StaticText(p, pos=(d+scene1.width,4), size=(L-2*d,d), label='Earth',
+              style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
 
 
 
