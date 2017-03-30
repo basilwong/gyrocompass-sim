@@ -46,8 +46,12 @@ WINDOW_POSY = 0
 WINDOW_HEIGHT = 1000
 WINDOW_WIDTH = 1000
 
+TEXTBOX_HEIGHT = 20
+TEXTBOX_WIDTH = 150
 TEXTBOX1_POSX = LEFTMARGIN
 TEXTBOX1_POSY = WINDOW_HEIGHT / 2 + 20
+TEXTBOX2_POSX = TEXTBOX1_POSX + LEFTMARGIN + TEXTBOX_WIDTH
+TEXTBOX2_POSY = TEXTBOX1_POSY
 
 
 ##setup window and displays
@@ -81,10 +85,17 @@ wx.StaticText(p, pos=(d+scene1.width,4), size=(L-2*d,d), label='Earth',
               style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
 
 ##setup textbox 1
-tc = wx.TextCtrl(p, pos=(d,WINDOW_HEIGHT / 2), value='You can type here:\n',
-            size=(150,90), style=wx.TE_MULTILINE)
-tc.SetInsertionPoint(len(tc.GetValue())+1) # position cursor at end of text
-tc.SetFocus() # so that keypresses go to the TextCtrl without clicking it
+lat = wx.TextCtrl(p, pos=(TEXTBOX1_POSX,TEXTBOX1_POSY), size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), style=wx.TE_MULTILINE)
+lat.SetInsertionPoint(len(lat.GetValue())+1) # position cursor at end of text
+
+##setup textbox 2
+lon = wx.TextCtrl(p, pos=(TEXTBOX2_POSX,TEXTBOX2_POSY),size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), style=wx.TE_MULTILINE)
+lon.SetInsertionPoint(len(lon.GetValue())+1) # position cursor at end of text
+
+wx.StaticText(p, pos=(TEXTBOX1_POSX,TEXTBOX1_POSY - d), size=(L-2*d,d), label='Latitude')
+              #style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
+wx.StaticText(p, pos=(TEXTBOX2_POSX,TEXTBOX2_POSY - d), size=(L-2*d,d), label='Longitude')
+              #style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
 
 #For defining the axis rotation on the inner ring from the point frame.
 def perpendicular_vector(v):

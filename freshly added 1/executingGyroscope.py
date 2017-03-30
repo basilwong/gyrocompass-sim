@@ -103,7 +103,7 @@ print(tc.GetValue())
 def g(y, x):
     y0 = y[0]
     y1 = y[1]
-    y2 =-100*y0
+    y2 =-100*y0 -5*y1
     return y1, y2
 
 # Initial conditions on y, y' at x=0
@@ -122,6 +122,7 @@ exact_y = 2*np.exp(2*exact_x)-exact_x*np.exp(-exact_x)
 for i in range(0,20000):
     rate(100)
     #gyro.rotate(angle=sol[i,0])
-    gyro.axis = vector(sin(sol[i,0]), sin(sol[i,0]), cos(sol[i,0]))
+    gyro.rotate(angle=0.5)
+    gyro.axis = vector(sin(sol[i,0]), 0, cos(sol[i,0]))
     IRING.axis = perpendicular_vector(gyro.axis)
     
