@@ -33,6 +33,16 @@ WINDOW_POSY = 0;
 WINDOW_HEIGHT = 1000;
 WINDOW_WIDTH = 1000;
 
+g = 9.81
+ten_neg_5 = 0.00001
+planetary_rotation = 7.2921150 ##rad/s E-5
+
+def setgrav(evt):
+    g = s1.GetValue()
+
+def setrotation(evt):
+    planetary_rotation = s2.GetValue()*ten_neg_5 ##rad/s
+
 
 ##setup window and displays
 w = window(title = 'Gyrocompass',x=WINDOW_POSX,y=WINDOW_POSY,width=WINDOW_WIDTH,height=WINDOW_HEIGHT,
@@ -61,6 +71,18 @@ wx.StaticText(p, pos=(d,4), size=(L-2*d,d), label='Gyroscope',
               style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
 wx.StaticText(p, pos=(d+scene1.width,4), size=(L-2*d,d), label='Earth',
               style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
+
+##slider for gravity
+s1 = wx.Slider(p, pos=(L,L+20), size=(0.9*L,20), minValue=0, maxValue=30)
+s1.Bind(wx.EVT_SCROLL, setgrav)
+s1.SetValue(9.81)
+wx.StaticText(p, pos=(L,L+10), label='Change gravity')
+
+##slider for planetary rotation speed
+s2 = wx.Slider(p, pos=(L,L+50), size=(0.9*L,20), minValue=0, maxValue=15)
+s2.Bind(wx.EVT_SCROLL, setrotation)
+s2.SetValue(planetary_rotation)
+wx.StaticText(p, pos=(L,L+40), label='Set planetary rotation (*10-5)')
 
 
 

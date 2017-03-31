@@ -53,6 +53,19 @@ TEXTBOX1_POSY = WINDOW_HEIGHT / 2 + 20
 TEXTBOX2_POSX = TEXTBOX1_POSX + LEFTMARGIN + TEXTBOX_WIDTH
 TEXTBOX2_POSY = TEXTBOX1_POSY
 
+EARTH_RADIUS = 1.0
+
+## this function converts a latitude and longitude in degrees into spherical coordinates
+def coordsToSphere(latitude,longitude):
+    r = EARTH_RADIUS
+    phi = latitude*pi/180
+    theta = longitude*pi/180
+    x = r *np.cos(phi) *np.sin(theta);
+    y = r *np.sin(phi);
+    z = r * np.cos(phi) * np.cos(theta)
+    spherical = (x,y,z)
+    return spherical
+
 
 ##setup window and displays
 w = window(title = 'Gyrocompass',x=WINDOW_POSX,y=WINDOW_POSY,width=WINDOW_WIDTH,height=WINDOW_HEIGHT,
@@ -75,7 +88,8 @@ ORING = ring(pos = ORING_POSITION, axis = ORING_AXIS, radius = ORING_RADIUS, thi
 
 ##populate scene 2
 scene2.select()
-sphere(pos = GYRO_POSITION,material = materials.earth)
+earth = sphere(pos = GYRO_POSITION,material = materials.earth, radius = EARTH_RADIUS)
+little_sphere = sphere(pos = earth.pos + (0,0,earth.radius) + (0,0,earth.radius/32), material = materials.emissive, color = (1,0,1),radius = earth.radius/32)
 
 p = w.panel # Refers to the full region of the window in which to place widgets
 
@@ -91,6 +105,9 @@ lat.SetInsertionPoint(len(lat.GetValue())+1) # position cursor at end of text
 ##setup textbox 2
 lon = wx.TextCtrl(p, pos=(TEXTBOX2_POSX,TEXTBOX2_POSY),size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), style=wx.TE_MULTILINE)
 lon.SetInsertionPoint(len(lon.GetValue())+1) # position cursor at end of text
+
+##if you want to see the little sphere respond to changes in lat and lon use line below
+##little_sphere.pos = coordsToSphere(lat,lon)
 
 wx.StaticText(p, pos=(TEXTBOX1_POSX,TEXTBOX1_POSY - d), size=(L-2*d,d), label='Latitude')
               #style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)

@@ -46,8 +46,25 @@ WINDOW_POSY = 0
 WINDOW_HEIGHT = 1000
 WINDOW_WIDTH = 1000
 
+TEXTBOX_HEIGHT = 20
+TEXTBOX_WIDTH = 150
 TEXTBOX1_POSX = LEFTMARGIN
 TEXTBOX1_POSY = WINDOW_HEIGHT / 2 + 20
+TEXTBOX2_POSX = TEXTBOX1_POSX + LEFTMARGIN + TEXTBOX_WIDTH
+TEXTBOX2_POSY = TEXTBOX1_POSY
+
+EARTH_RADIUS = 1.0
+
+## this function converts a latitude and longitude in degrees into spherical coordinates
+def coordsToSphere(latitude,longitude):
+    r = EARTH_RADIUS
+    phi = latitude*pi/180
+    theta = longitude*pi/180
+    x = r *np.cos(phi) *np.sin(theta);
+    y = r *np.sin(phi);
+    z = r * np.cos(phi) * np.cos(theta)
+    spherical = (x,y,z)
+    return spherical
 
 
 ##setup window and displays
@@ -63,7 +80,7 @@ scene2 = display(window=w, x=d+scene1.width, y=d, width=L-2*d, height=L-2*d, for
 scene1.select()
 gyro = frame()
 indicator = arrow(frame = gyro, pos= INDICATOR_POSITION, axis= INDICATOR_AXIS , shaftwidth= INDICATOR_WIDTH, color = INDICATOR_COLOR, opacity = INDICATOR_OPACITY) #North Indicator
-base = pyramid(pos = BASE_POSITION, axis = BASE_AXIS, size = BASE_SIZE, color = BASE_COLOUR) ## create the suppport for the outer ring 
+base = pyramid(pos = BASE_POSITION, axis = BASE_AXIS, size = BASE_SIZE, color = BASE_COLOUR) ## create the suppport for the outer ring
 rod = cylinder(frame = gyro, pos= ROD_POSITION, axis= ROD_AXIS , radius= ROD_RADIUS) #Inner Rotating Circle
 spinner = cylinder(frame = gyro, pos= GYRO_POSITION, axis= GYRO_AXIS, radius= GYRO_RADIUS,material = materials.wood) #Circle Supports
 IRING = ring(pos = IRING_POSITION , axis = IRING_AXIS, radius = IRING_RADIUS, thickness = IRING_THICKNESS, color = IRING_COLOUR) #XZ Plane Ring
@@ -71,7 +88,9 @@ ORING = ring(pos = ORING_POSITION, axis = ORING_AXIS, radius = ORING_RADIUS, thi
 
 ##populate scene 2
 scene2.select()
-sphere(pos = GYRO_POSITION,material = materials.earth)
+earth = sphere(pos = GYRO_POSITION,material = materials.earth, radius = EARTH_RADIUS)
+little_sphere = sphere(pos = earth.pos + (0,0,earth.radius) + (0,0,earth.radius/32), material = materials.emissive, color = (1,0,1),radius = earth.radius/32)
+
 
 p = w.panel # Refers to the full region of the window in which to place widgets
 
@@ -81,10 +100,20 @@ wx.StaticText(p, pos=(d+scene1.width,4), size=(L-2*d,d), label='Earth',
               style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
 
 ##setup textbox 1
-tc = wx.TextCtrl(p, pos=(d,WINDOW_HEIGHT / 2), value='You can type here:\n',
-            size=(150,90), style=wx.TE_MULTILINE)
-tc.SetInsertionPoint(len(tc.GetValue())+1) # position cursor at end of text
-tc.SetFocus() # so that keypresses go to the TextCtrl without clicking it
+lat = wx.TextCtrl(p, pos=(TEXTBOX1_POSX,TEXTBOX1_POSY), size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), style=wx.TE_MULTILINE)
+lat.SetInsertionPoint(len(lat.GetValue())+1) # position cursor at end of text
+
+##setup textbox 2
+lon = wx.TextCtrl(p, pos=(TEXTBOX2_POSX,TEXTBOX2_POSY),size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), style=wx.TE_MULTILINE)
+lon.SetInsertionPoint(len(lon.GetValue())+1) # position cursor at end of text
+
+##if you want to see the little sphere respond to changes in lat and lon use line below
+##little_sphere.pos = coordsToSphere(lat,lon)
+
+wx.StaticText(p, pos=(TEXTBOX1_POSX,TEXTBOX1_POSY - d), size=(L-2*d,d), label='Latitude')
+              #style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
+wx.StaticText(p, pos=(TEXTBOX2_POSX,TEXTBOX2_POSY - d), size=(L-2*d,d), label='Longitude')
+              #style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
 
 #For defining the axis rotation on the inner ring from the point frame.
 def perpendicular_vector(v):
@@ -94,35 +123,3 @@ def perpendicular_vector(v):
         return (0, 1, 0)
     return (-v.y, v.x, 0)
 
-
-print(tc.GetValue())
-
-
-
-
-def g(y, x):
-    y0 = y[0]
-    y1 = y[1]
-    y2 =-100*y0 -5*y1
-    return y1, y2
-
-# Initial conditions on y, y' at x=0
-init = 1.5, 0.0
-# First integrate from 0 to 2
-x = np.linspace(0,5,20000)
-sol=odeint(g, init, x)
-# Then integrate from 0 to -2
-x = np.linspace(0,5,20000)
-sol=odeint(g, init, x)
-
-# The analytical answer in red dots
-exact_x = np.linspace(-2,2,10)
-exact_y = 2*np.exp(2*exact_x)-exact_x*np.exp(-exact_x)
-
-for i in range(0,20000):
-    rate(100)
-    #gyro.rotate(angle=sol[i,0])
-    gyro.rotate(angle=0.5)
-    gyro.axis = vector(sin(sol[i,0]), 0, cos(sol[i,0]))
-    IRING.axis = perpendicular_vector(gyro.axis)
-    
