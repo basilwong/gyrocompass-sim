@@ -8,6 +8,7 @@ from scipy.integrate import odeint
 ## this function converts a latitude and longitude in degrees into spherical coordinates
 
 def solvr(z, t):
+    #little_sphere.pos = coordsToSphere(float(np.random.sample()), float(np.random.sample()))
     alpha, alphadot = z
     return [alphadot, (I1*omega*(phidot - omega*sin(float(lat.GetValue()) * pi / 180 + pi/2)*cos(alpha))*sin((float(lat.GetValue()) * pi / 180 + pi/2))*sin(alpha) +
 	1/2 * I2 *omega*omega * (sin((float(lat.GetValue()) * pi / 180 + pi/2)))*(sin((float(lat.GetValue()) * pi / 180) + pi/2))*sin(2*alpha))/I2 - alphadot*1.5]
@@ -25,7 +26,8 @@ def coordsToSphere(latitude,longitude):
 
 def OnEnterPressed(event):
     little_sphere.pos = coordsToSphere(float(lat.GetValue()),float(lon.GetValue()))
-    sol = RunSimulation()
+    sol[:] = (RunSimulation())
+    print(sol[5000,0])
     return
 
 def RunSimulation():
@@ -160,10 +162,10 @@ def perpendicular_vector(v):
 #start = wx.Button(p, label='Start', pos=(900,15))
 #start.Bind(wx.EVT_BUTTON, setright)
 while(true):
+    print(sol[5000,0])
     for i in range(0,5000):
-       
-        rate(1000)
-        gyro.rotate(angle=0.05)
+        rate(100)
+        gyro.rotate(angle=0.5)
         gyro.axis = vector(sin(sol[i,0]), 0, cos(sol[i,0]))
         IRING.axis = perpendicular_vector(gyro.axis)
 
