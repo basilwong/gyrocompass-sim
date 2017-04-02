@@ -23,7 +23,5 @@ phi = np.linspace(0, 3000, 30000)
 zinit = [2*pi/3,0]
 z = integrate.odeint(solvr, zinit, phi)
 u, udot = z.T
-plt.plot(phi, u)
 
-plt.show()
 

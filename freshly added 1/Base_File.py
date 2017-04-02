@@ -98,6 +98,9 @@ wx.StaticText(p, pos=(d,4), size=(L-2*d,d), label='Gyroscope',
 wx.StaticText(p, pos=(d+scene1.width,4), size=(L-2*d,d), label='Earth',
               style=wx.ALIGN_CENTRE | wx.ST_NO_AUTORESIZE)
 
+p.Bind(wx.EVT_KEY_DOWN,onKeyDown)
+
+
 ##setup textbox 1
 lat = wx.TextCtrl(p, pos=(TEXTBOX1_POSX,TEXTBOX1_POSY), size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), style=wx.TE_MULTILINE)
 lat.SetInsertionPoint(len(lat.GetValue())+1) # position cursor at end of text
@@ -105,6 +108,7 @@ lat.SetInsertionPoint(len(lat.GetValue())+1) # position cursor at end of text
 ##setup textbox 2
 lon = wx.TextCtrl(p, pos=(TEXTBOX2_POSX,TEXTBOX2_POSY),size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), style=wx.TE_MULTILINE)
 lon.SetInsertionPoint(len(lon.GetValue())+1) # position cursor at end of text
+
 
 ##if you want to see the little sphere respond to changes in lat and lon use line below
 ##little_sphere.pos = coordsToSphere(lat,lon)
@@ -121,3 +125,7 @@ def perpendicular_vector(v):
             raise ValueError('zero vector')
         return (0, 1, 0)
     return (-v.y, v.x, 0)
+
+while true:
+    if scene1.kb.getkey()
+
