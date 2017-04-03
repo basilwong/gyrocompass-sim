@@ -187,8 +187,9 @@ ORING = ring(pos = ORING_POSITION, axis = ORING_AXIS, radius = ORING_RADIUS, thi
 
 ##populate scene 2
 scene2.select()
-earth = sphere(pos = GYRO_POSITION,material = materials.earth, radius = EARTH_RADIUS)
-little_sphere = arrow(pos = earth.pos + (0,0,earth.radius) + (0,0,earth.radius/32), material = materials.emissive, color = (1,0,1),shaftwidth=0.02, length = 0.12)
+earthframe = frame()
+earth = sphere(frame = earthframe, pos = GYRO_POSITION,material = materials.earth, radius = EARTH_RADIUS)
+little_sphere = arrow(frame = earthframe,pos = earth.pos + (0,0,earth.radius) + (0,0,earth.radius/32), material = materials.emissive, color = (1,0,1),shaftwidth=0.02, length = 0.12)
 
 p = w.panel # Refers to the full region of the window in which to place widgets
 
@@ -269,7 +270,6 @@ while(true):
             if should_break == true:
                 should_break = false
                 break
-
         v1 = little_sphere.pos 
         v2 = rotate(OGvector, angle = sol[i,0], axis = v1)
         little_sphere.axis = v2
@@ -278,6 +278,8 @@ while(true):
         gyro.rotate(angle= phidot/500)
         gyro.axis = vector(sin(sol[i,0]), 0, cos(sol[i,0]))
         IRING.axis = perpendicular_vector(gyro.axis)
+        earthframe.rotate(angle = float(omega)/10000, axis = (0,1,0))
+
 
 
 
