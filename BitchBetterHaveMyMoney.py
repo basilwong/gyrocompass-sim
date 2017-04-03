@@ -1,4 +1,5 @@
 from visual import *
+import time
 import numpy as np
 import wx
 import scipy as sp
@@ -33,6 +34,7 @@ def coordsToSphere(latitude,longitude):
     return spherical
 
 def OnEnterPressed(event):
+    global should_break 
     should_break = true
     little_sphere.pos = coordsToSphere(float(lat.GetValue()),float(lon.GetValue()))
     v1 = vector(0,1,0)
@@ -53,9 +55,9 @@ def RunSimulation():
     # Initial conditions on y, y' at x=0
     init = pi/2, 0.0
     # First integrate from 0 to 2
-    x = np.linspace(0,5,20000)
+    x = np.linspace(0,30,9000)
     # Then integrate from 0 to -2
-    x = np.linspace(0,5,20000)
+    x = np.linspace(0,30,9000)
     return odeint(solvr, init, x)
 
 
@@ -155,7 +157,7 @@ MAX_DAMPER = 15
 Loops_per_second = 50
 should_break = false 
 dampeningConstant = 1.5
-sol = np.zeros((20000,2))
+sol = np.zeros((9000,2))
 omega =5
 #omega = 0.00007295
 I1 = .125 * 0.30 * 3 / 2
@@ -260,17 +262,20 @@ sol = RunSimulation()
 #start = wx.Button(p, label='Start', pos=(900,15))
 #start.Bind(wx.EVT_BUTTON, setright)
 while(true):
-    for i in range(0,5000):
+    for i in range(0,9000):
         wx.Yield()
-        if should_break == true:
-            should_break = false
-            print('lol')
+        if i % 20 == 0:
+            wx.Yield()
+            if should_break == true:
+                should_break = false
+                break
+
         v1 = little_sphere.pos 
         v2 = rotate(OGvector, angle = sol[i,0], axis = v1)
         little_sphere.axis = v2
         little_sphere.length = 0.12
-        rate(100)
-        gyro.rotate(angle=0.5)
+        rate(Loops_per_second)
+        gyro.rotate(angle= phidot/500)
         gyro.axis = vector(sin(sol[i,0]), 0, cos(sol[i,0]))
         IRING.axis = perpendicular_vector(gyro.axis)
 
