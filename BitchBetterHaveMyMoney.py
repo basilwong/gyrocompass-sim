@@ -68,19 +68,19 @@ def SetRate(evt): # called on slider events
     OnEnterPressed(evt)
 
 def SetPhidot(evt): # called on slider events
-    value = s2.GetValue()
+    value = float(s2.GetValue())
     global phidot
     phidot = -1*value
     OnEnterPressed(evt)
 
 def SetOmega(evt): # called on slider events
-    value = s3.GetValue()
+    value = float(s3.GetValue())
     global omega
     omega = value
     OnEnterPressed(evt)
 
 def SetDamper(evt): # called on slider events
-    value = s4.GetValue()
+    value = float(s4.GetValue())
     global dampeningConstant
     dampeningConstant = value
     OnEnterPressed(evt)
@@ -139,20 +139,14 @@ RATE_SLIDER_POSY = TEXTBOX1_POSY + TEXTBOX_HEIGHT + 25
 MIN_RATE = 1
 MAX_RATE = 1000
 
-PHIDOT_SLIDER_POSX = TEXTBOX1_POSX
-PHIDOT_SLIDER_POSY = RATE_SLIDER_POSY + 50
-MIN_PHIDOT = 0
-MAX_PHIDOT = 100
+PHIDOT_SLIDER_POSX = TEXTBOX2_POSX + LEFTMARGIN + TEXTBOX_WIDTH
+PHIDOT_SLIDER_POSY = TEXTBOX1_POSY
 
-OMEGA_SLIDER_POSX = TEXTBOX1_POSX
-OMEGA_SLIDER_POSY = PHIDOT_SLIDER_POSY + 50
-MIN_OMEGA = 0
-MAX_OMEGA = 15
+OMEGA_SLIDER_POSX = PHIDOT_SLIDER_POSX + LEFTMARGIN + TEXTBOX_WIDTH
+OMEGA_SLIDER_POSY = TEXTBOX1_POSY
 
-DAMPER_SLIDER_POSX = TEXTBOX1_POSX + 500
-DAMPER_SLIDER_POSY = PHIDOT_SLIDER_POSY + 50
-MIN_DAMPER = 0
-MAX_DAMPER = 15 
+DAMPER_SLIDER_POSX = OMEGA_SLIDER_POSX + LEFTMARGIN + TEXTBOX_WIDTH
+DAMPER_SLIDER_POSY = TEXTBOX1_POSY
 
 Loops_per_second = 50
 should_break = false 
@@ -219,23 +213,20 @@ s1.Bind(wx.EVT_SCROLL, SetRate)
 s1.SetValue(Loops_per_second) # update the slider
 wx.StaticText(p, pos=(RATE_SLIDER_POSX,RATE_SLIDER_POSY - 20), label='Set oscillation rate')
 
-#Initializing slider for modifying angular velocity of gyroscope
-s2 = wx.Slider(p, pos=(PHIDOT_SLIDER_POSX,PHIDOT_SLIDER_POSY), size=(0.9*L,20), minValue=MIN_PHIDOT, maxValue=MAX_PHIDOT)
-s2.Bind(wx.EVT_SCROLL, SetPhidot)
-s2.SetValue(phidot) # update the slider
-wx.StaticText(p, pos=(PHIDOT_SLIDER_POSX,PHIDOT_SLIDER_POSY - 20), label='Set Gyroscope Angular Velocity')
+#Initializing textbox for modifying angular velocity of gyroscope
+s2 = wx.TextCtrl(p, pos=(PHIDOT_SLIDER_POSX,PHIDOT_SLIDER_POSY), size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), value = str(phidot))
+s2.Bind(wx.EVT_TEXT_ENTER, SetPhidot)
+wx.StaticText(p, pos=(PHIDOT_SLIDER_POSX,PHIDOT_SLIDER_POSY - 20), label='Gyroscope Angular Velocity')
 
-#Initializing slider for modifying planetary angular velocity
-s3 = wx.Slider(p, pos=(OMEGA_SLIDER_POSX,OMEGA_SLIDER_POSY), size=(0.9*L,20), minValue=MIN_OMEGA, maxValue=MAX_OMEGA)
-s3.Bind(wx.EVT_SCROLL, SetOmega)
-s3.SetValue(omega) # update the slider
-wx.StaticText(p, pos=(OMEGA_SLIDER_POSX,OMEGA_SLIDER_POSY - 20), label='Set Planetary Angular Velocity')
+#Initializing textbox for modifying planetary angular velocity
+s3 = wx.TextCtrl(p, pos=(OMEGA_SLIDER_POSX,OMEGA_SLIDER_POSY), size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), value = str(omega))
+s3.Bind(wx.EVT_TEXT_ENTER, SetOmega)
+wx.StaticText(p, pos=(OMEGA_SLIDER_POSX,OMEGA_SLIDER_POSY - 20), label='Planetary Angular Velocity')
 
-#Initializing slider for modifying dampening constant for ode
-s4 = wx.Slider(p, pos=(DAMPER_SLIDER_POSX,DAMPER_SLIDER_POSY), size=(0.9*L,20), minValue=MIN_DAMPER, maxValue=MAX_DAMPER)
-s4.Bind(wx.EVT_SCROLL, SetDamper)
-s4.SetValue(dampeningConstant) # update the slider
-wx.StaticText(p, pos=(DAMPER_SLIDER_POSX,DAMPER_SLIDER_POSY - 20), label='Set Dampening Constant')
+#Initializing textbox for modifying dampening constant for ode
+s4 = wx.TextCtrl(p, pos=(DAMPER_SLIDER_POSX,DAMPER_SLIDER_POSY), size=(TEXTBOX_WIDTH,TEXTBOX_HEIGHT), value = str(dampeningConstant))
+s4.Bind(wx.EVT_TEXT_ENTER, SetDamper)
+wx.StaticText(p, pos=(DAMPER_SLIDER_POSX,DAMPER_SLIDER_POSY - 20), label='Dampening Constant')
 
 
 ##if you want to see the little sphere respond to changes in lat and lon use line below
