@@ -1,4 +1,5 @@
 from visual import *
+from visual.graph import * # import graphing features
 import time
 import numpy as np
 import wx
@@ -126,8 +127,7 @@ def move(evt):
 
     dtheta = dx*pi/90
     gyro.axis += (dtheta,0,0)
-    initial_angle = gyro.axis[0] 
-    print dtheta
+    initial_angle = gyro.axis[0]
 
 
 def stop(evt):
@@ -333,7 +333,13 @@ little_sphere.length = 0.12
 sol = RunSimulation()
 
 while (true):
-
+    if(not click):
+        graph1 = gdisplay(x=900, y=0, width=600, height=800,
+                          title='theta vs. t', xtitle='t', ytitle='Gyrocompass Angle to North',
+                          background=color.black)
+        f1 = gcurve(color=color.cyan)  # a graphics curve
+        #    for i in range(0, 7500 * 30):
+        #        f1.plot(gdisplay = graph1, pos=(i,sol[i, 0])) # plot
     for i in range(0, 1500 * 30):
         rate(Loops_per_second)
         wx.Yield()
@@ -353,3 +359,5 @@ while (true):
         gyro.axis = vector(sin(sol[i, 0]), 0, cos(sol[i, 0]))
         IRING.axis = perpendicular_vector(gyro.axis)
         earthframe.rotate(angle=float(omega) / 30, axis=(0, 1, 0))
+        if i % 5 == 0:
+            f1.plot(gdisplay = graph1, pos=(i,sol[i, 0])) # plot
