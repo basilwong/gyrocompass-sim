@@ -12,3 +12,7 @@ This module is most easily run in the VIDLE environment which can be downloaded 
 http://vpython.org/contents/download_windows.html
 
 Once the code in this repository has been pulled onto the local computer, open one of the main files using the VIDLE and run the module. 
+
+## Module Preview
+
+![alt text](https://raw.githubusercontent.com/basilwong/gyrocompass-sim/master/presentation-files/gyrocompass-pic.PNG)
