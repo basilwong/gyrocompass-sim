@@ -1,5 +1,9 @@
 # Gryoscope Simulation
 
+## Background
+
+A gyrocompass is a type of non-magnetic compass which is based on a fast-spinning disc and the rotation of the Earth to find geographical direction automatically. Although one important component of a gyrocompass is a gyroscope, these are not the same devices; a gyrocompass is built to use the effect of gyroscopic precession, which is a distinctive aspect of the general gyroscopic effect.
+
 ## Summary
 
 This project simulates the movement of a gyrocompass and how its change in angular momentum overtime evolves due to planetary rotaion. 
