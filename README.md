@@ -6,7 +6,7 @@ A gyrocompass is a type of non-magnetic compass which is based on a fast-spinnin
 
 ## Summary
 
-This project simulates the movement of a gyrocompass and how its change in angular momentum overtime evolves due to planetary rotaion. 
+This project simulates the movement of a gyrocompass and how its change in angular momentum overtime evolves due to planetary rotation. 
 
 Running one the main files opens a GUI and animation. The GUI allows the user to alter the simulated position on earth, the gyroscope angular velocity, the planetary angular velocity, the dampening constant and the step size. The animation shows the spinnig gyroscope's angular velocity direction, the gyroscopes position on earth, and the earth's corresponding rotation. 
 
